@@ -3,6 +3,7 @@ CREATE DATABASE employee_db;
 USE employee_db;
 
 -- table for all employees:
+
 CREATE TABLE employees (
   id INTEGER AUTO_INCREMENT,
   first_name VARCHAR(50),

@@ -5,14 +5,14 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: 3300,
   user: "root",
-  password: "",
+  password: "Chiakaray820",
   database: "employee_db"
 });
 
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
-  start(); 
+  init(); 
 });
 
 connection.connect(function(err) {
@@ -53,8 +53,8 @@ function init(){
         removeEmployee(); 
         break;
       
-        case "Add a Department": 
-        addDepartment(); 
+        case "Add new Department": 
+        addNewDepartment(); 
         break;
   
         case "View all Departments":
@@ -62,7 +62,7 @@ function init(){
         break;
   
         case "Add new Roles": 
-        addNewRoles(); 
+        addNewRole(); 
         break;
   
         case "View all Roles": 
@@ -103,7 +103,7 @@ function init(){
           message: "What is the manager ID of the employee?",
           name: "manager_id"
         }
-      ]).then(function(res) {
+      ]).then(res => {
         const first_name = res.first_name;
         const last_name = res.last_name;
         const role_id = res.role_id;
@@ -112,7 +112,7 @@ function init(){
         connection.query(query, function(err, res) {
           if (err) throw err;
           console.table(res);
-          start();
+          init();
         });
       });
   }
@@ -123,22 +123,46 @@ function init(){
     connection.query(query, function(err, res) {
       if (err) throw err;
       console.table(res);
-      start();
+      init();
     });
   }
   
 // Function to remove an eployee from the table:
+function removeEmployee() {
 
+  inquirer.prompt([
+      {
+          name: "first_name",
+          type: "input",
+          message: "What is the first name of the employee?"
+      },
+      {
+          name: "last_name",
+          type: "input",
+          message: "What is the last name of the employee?"
+      }
+  ]).then(function (res) {
+
+      connection.query("DELETE FROM employee WHERE first_name = ? and last_name = ?", [res.first_name, res.last_name], function (err) {
+          if (err) throw err;
+
+          init();
+      })
+
+
+  });
+
+}
 
 
 // Function to add a department:
 
-function addDepartment() {
+function addNewDepartment() {
   inquirer.prompt({
       type: "input",
       message: "What is the name of the department you would like to add?",
       name: "department"
-    }).then(function(res) {
+    }).then(res => {
       const department = res.department;
       const query = `INSERT INTO department (name) VALUES("${department}")`;
       connection.query(query, function(err, res) {
@@ -147,4 +171,59 @@ function addDepartment() {
         init();
       });
     });
+};
+
+// Function to view all departments:
+
+function viewAllDepartments() {
+  const query = "SELECT * FROM department";
+  connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.table(res);
+    init();
+  });
 }
+
+// Function to add new role:
+function addNewRole() {
+  inquirer.prompt([
+      {
+        type: "input",
+        message: "What is the job title you want to add?",
+        name: "title"
+      },
+      {
+        type: "input",
+        message: "What is the salary for this position?",
+        name: "salary"
+      },
+      {
+        type: "input",
+        message: "What is the department ID for this position?",
+        name: "department_id"
+      }
+    ]).then(res => {
+      const title = res.title;
+      const salary = res.salary;
+      const department_id = res.department_id;
+      const query = `INSERT INTO role (title, salary, department_id) VALUE("${title}", "${salary}", "${department_id}")`;
+      connection.query(query, function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        init();
+      });
+    });
+}
+
+// Function to view all employee roles:
+function viewAllRoles() {
+  const query = "SELECT * FROM role";
+  connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.table(res);
+    init();
+  });
+}
+
+// Function to update an employee role:
+

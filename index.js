@@ -25,23 +25,23 @@ function init(){
   inquirer.prompt ([
     {
       type: "list", 
-      message: "What would you like to do?",
-      name: "start",
+      message: "Main Menu: What would you like to do?",
+      name: "init",
       choices: [
-      "Add New Employee", 
+      "Add new Employee", 
       "View all Employees", 
       "Remove an Employee",
       "Add a Department", 
       "View all Departments",
-      "Add Roles", 
+      "Add new Roles", 
       "View all Roles", 
-      "Update Employee Role", 
+      "Update an Employee Role", 
       "Exit"
     ]}
   ]).then (function(response){
       switch (response.init){
   
-        case "Add New Employee":
+        case "Add new Employee":
         addNewEmployee();
         break;
        
@@ -61,15 +61,15 @@ function init(){
         viewAllDepartments();
         break;
   
-        case "Add Roles": 
-        addRole(); 
+        case "Add new Roles": 
+        addNewRoles(); 
         break;
   
         case "View all Roles": 
         viewAllRoles(); 
         break;
       
-        case "Update Employee Role":
+        case "Update an Employee Role":
         updateRole(); 
         break;
   
@@ -78,4 +78,41 @@ function init(){
         break; 
       }
     })
+  }
+
+  //function to run when addNewEmployee is selected
+  function addNewEmployee() {
+    inquirer.prompt([
+        {
+          type: "input",
+          message: "What is the first name of the employee?",
+          name: "firstName"
+        },
+        {
+          type: "input",
+          message: "What is the last name of the employee?",
+          name: "lastName"
+        },
+        {
+          type: "input",
+          message: "What is the role ID of the employee?",
+          name: "roleID"
+        },
+        {
+          type: "input",
+          message: "What is the manager ID of the employee?",
+          name: "managerID"
+        }
+      ]).then(function(res) {
+        const firstName = res.firstName;
+        const lastName = res.lastName;
+        const roleID = res.roleID;
+        const managerID = res.managerID;
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE("${firstName}", "${lastName}", "${roleID}", "${managerID}")`;
+        connection.query(query, function(err, res) {
+          if (err) throw err;
+          console.table(res);
+          start();
+        });
+      });
   }

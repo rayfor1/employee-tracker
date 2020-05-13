@@ -6,8 +6,8 @@ USE employee_db;
 
 CREATE TABLE employees (
   id INTEGER NOT NULL,
-  first_name VARCHAR(50),
-  last_name VARCHAR (50),
+  first_name VARCHAR(30),
+  last_name VARCHAR (30),
   role_id INTEGER (200),
   manager_id INTEGER (10) NULL,
   PRIMARY KEY (id)
@@ -16,7 +16,7 @@ CREATE TABLE employees (
 -- table for roles
 CREATE TABLE roles (
   id INTEGER NOT NULL,
-  title VARCHAR(50),
+  title VARCHAR(30),
   salary DECIMAL(30,2),
   department_id INTEGER (10),
   PRIMARY KEY (id)
@@ -25,7 +25,7 @@ CREATE TABLE roles (
 -- table for departments
 CREATE TABLE departments (
   id INTEGER NOT NULL,
-  name VARCHAR(50),
+  name VARCHAR(30),
   PRIMARY KEY (id)
 );
 

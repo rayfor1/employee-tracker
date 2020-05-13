@@ -15,12 +15,6 @@ connection.connect(function(err) {
   init(); 
 });
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("connected as id " + connection.threadId + "\n");
-  init(); 
-});
-
 function init(){
   inquirer.prompt ([
     {
@@ -226,4 +220,32 @@ function viewAllRoles() {
 }
 
 // Function to update an employee role:
-
+function updateRole(){
+  ​
+  connection.query("SELECT first_name, last_name, id FROM employees",
+  function(err,res){
+    let employees = res.map(employee => ({name: employee.first_name + " " + employee.last_name, value: employee.id}))
+  ​  inquirer.prompt([
+      {
+        type: "list",
+        name: "employee_name",
+        message: "Which employee's role should updated?", 
+        choices: employees
+      },
+      {
+        type: "input",
+        name: "new_role",
+        message: "What is the new role for the employee?"
+      }
+    ]).then (function(res){
+      connection.query(`UPDATE employees SET role_id = ${res.new_role} WHERE id = ${res.employee_name}`,
+      function (err, res){
+        console.table(res);
+        init()
+      }
+      );
+    })
+  }
+  )
+  }
+  

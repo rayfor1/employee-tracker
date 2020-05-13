@@ -80,7 +80,7 @@ function init(){
     })
   }
 
-  //function to run when addNewEmployee is selected
+// Function to run when addNewEmployee is selected (adds an employee to the table)
   function addNewEmployee() {
     inquirer.prompt([
         {
@@ -117,7 +117,7 @@ function init(){
       });
   }
 
-  //function to view all employees:
+// Function to view all employees listed on the table:
   function viewAllEmployees() {
     const query = "SELECT * FROM employee";
     connection.query(query, function(err, res) {
@@ -127,3 +127,24 @@ function init(){
     });
   }
   
+// Function to remove an eployee from the table:
+
+
+
+// Function to add a department:
+
+function addDepartment() {
+  inquirer.prompt({
+      type: "input",
+      message: "What is the name of the department you would like to add?",
+      name: "department"
+    }).then(function(res) {
+      const department = res.department;
+      const query = `INSERT INTO department (name) VALUES("${department}")`;
+      connection.query(query, function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        init();
+      });
+    });
+}

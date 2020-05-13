@@ -86,29 +86,29 @@ function init(){
         {
           type: "input",
           message: "What is the first name of the employee?",
-          name: "firstName"
+          name: "first_name"
         },
         {
           type: "input",
           message: "What is the last name of the employee?",
-          name: "lastName"
+          name: "last_name"
         },
         {
           type: "input",
           message: "What is the role ID of the employee?",
-          name: "roleID"
+          name: "role_id"
         },
         {
           type: "input",
           message: "What is the manager ID of the employee?",
-          name: "managerID"
+          name: "manager_id"
         }
       ]).then(function(res) {
-        const firstName = res.firstName;
-        const lastName = res.lastName;
-        const roleID = res.roleID;
-        const managerID = res.managerID;
-        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE("${firstName}", "${lastName}", "${roleID}", "${managerID}")`;
+        const first_name = res.first_name;
+        const last_name = res.last_name;
+        const role_id = res.role_id;
+        const manager_id = res.manager_id;
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE("${first_name}", "${last_name}", "${role_id}", "${manager_id}")`;
         connection.query(query, function(err, res) {
           if (err) throw err;
           console.table(res);
@@ -116,3 +116,14 @@ function init(){
         });
       });
   }
+
+  //function to view all employees:
+  function viewAllEmployees() {
+    const query = "SELECT * FROM employee";
+    connection.query(query, function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      start();
+    });
+  }
+  

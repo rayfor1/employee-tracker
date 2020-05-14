@@ -5,7 +5,7 @@ USE employee_db;
 -- table for all employees:
 
 CREATE TABLE employees (
-  id INTEGER NOT NULL,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30),
   last_name VARCHAR (30),
   role_id INTEGER (10),
@@ -15,7 +15,7 @@ CREATE TABLE employees (
 
 -- table for roles
 CREATE TABLE roles (
-  id INTEGER NOT NULL,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   title VARCHAR(30),
   salary DECIMAL(30,2),
   department_id INTEGER (10),
@@ -24,7 +24,7 @@ CREATE TABLE roles (
 
 -- table for departments
 CREATE TABLE departments (
-  id INTEGER NOT NULL,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   name VARCHAR(30),
   PRIMARY KEY (id)
 );

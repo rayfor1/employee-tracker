@@ -3,7 +3,7 @@ const inquirer = require ('inquirer');
 const consoleTable = require("console.table")
 const connection = mysql.createConnection({
   host: "localhost",
-  port: 3300,
+  port: 3306,
   user: "root",
   password: "Chiakaray820",
   database: "employee_db"
@@ -12,9 +12,9 @@ const connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
-  init(); 
 });
 
+init(); 
 function init(){
   inquirer.prompt ([
     {
@@ -102,10 +102,13 @@ function init(){
         const last_name = res.last_name;
         const role_id = res.role_id;
         const manager_id = res.manager_id;
-        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE("${first_name}", "${last_name}", "${role_id}", "${manager_id}")`;
+        const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE("${first_name}", "${last_name}", "${role_id}", "${manager_id}")`;
         connection.query(query, function(err, res) {
           if (err) throw err;
-          console.table(res);
+          //console.table(res);
+          if( res.affectedRows === 1 ){
+            console.log("Insert succeeded.")
+          }
           init();
         });
       });
@@ -113,7 +116,7 @@ function init(){
 
 // Function to view all employees listed on the table:
   function viewAllEmployees() {
-    const query = "SELECT * FROM employee";
+    const query = "SELECT * FROM employees";
     connection.query(query, function(err, res) {
       if (err) throw err;
       console.table(res);
@@ -137,7 +140,7 @@ function removeEmployee() {
       }
   ]).then(function (res) {
 
-      connection.query("DELETE FROM employee WHERE first_name = ? and last_name = ?", [res.first_name, res.last_name], function (err) {
+      connection.query("DELETE FROM employees WHERE first_name = ? and last_name = ?", [res.first_name, res.last_name], function (err) {
           if (err) throw err;
 
           init();
@@ -158,7 +161,7 @@ function addNewDepartment() {
       name: "department"
     }).then(res => {
       const department = res.department;
-      const query = `INSERT INTO department (name) VALUES("${department}")`;
+      const query = `INSERT INTO departments (name) VALUES("${department}")`;
       connection.query(query, function(err, res) {
         if (err) throw err;
         console.table(res);
@@ -170,7 +173,7 @@ function addNewDepartment() {
 // Function to view all departments:
 
 function viewAllDepartments() {
-  const query = "SELECT * FROM department";
+  const query = "SELECT * FROM departments";
   connection.query(query, function(err, res) {
     if (err) throw err;
     console.table(res);
@@ -200,7 +203,7 @@ function addNewRole() {
       const title = res.title;
       const salary = res.salary;
       const department_id = res.department_id;
-      const query = `INSERT INTO role (title, salary, department_id) VALUE("${title}", "${salary}", "${department_id}")`;
+      const query = `INSERT INTO roles (title, salary, department_id) VALUE("${title}", "${salary}", "${department_id}")`;
       connection.query(query, function(err, res) {
         if (err) throw err;
         console.table(res);
@@ -211,7 +214,7 @@ function addNewRole() {
 
 // Function to view all employee roles:
 function viewAllRoles() {
-  const query = "SELECT * FROM role";
+  const query = "SELECT * FROM roles";
   connection.query(query, function(err, res) {
     if (err) throw err;
     console.table(res);
@@ -221,11 +224,11 @@ function viewAllRoles() {
 
 // Function to update an employee role:
 function updateRole(){
-  ​
+  
   connection.query("SELECT first_name, last_name, id FROM employees",
   function(err,res){
     let employees = res.map(employee => ({name: employee.first_name + " " + employee.last_name, value: employee.id}))
-  ​  inquirer.prompt([
+    inquirer.prompt([
       {
         type: "list",
         name: "employee_name",
